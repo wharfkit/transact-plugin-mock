@@ -1,12 +1,12 @@
 {
-    "name": "@wharfkit/transact-plugin-template",
-    "description": "A template to create plugins for use with @wharfkit/session transact method.",
+    "name": "@wharfkit/transact-plugin-mock",
+    "description": "A mock TransactPlugin to simulate specific events.",
     "version": "0.1.0",
-    "homepage": "https://github.com/wharfkit/transact-plugin-template",
+    "homepage": "https://github.com/wharfkit/transact-plugin-mock",
     "license": "BSD-3-Clause",
-    "main": "lib/transact-plugin-template.js",
-    "module": "lib/transact-plugin-template.m.js",
-    "types": "lib/transact-plugin-template.d.ts",
+    "main": "lib/transact-plugin-mock.js",
+    "module": "lib/transact-plugin-mock.m.js",
+    "types": "lib/transact-plugin-mock.d.ts",
     "sideEffects": false,
     "files": [
         "lib/*",

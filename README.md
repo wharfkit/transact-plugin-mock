@@ -1,13 +1,10 @@
-# @wharfkit/transact-plugin-template
+# @wharfkit/transact-plugin-mock
 
-A template to create a `transactPlugin` for use during a `transact` call within the `@wharfkit/session` library.
+A mock TransactPlugin to simulate specific event types in testing environments.
 
 ## Usage
 
--   [Use this as a template.](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
--   Write your plugin's logic.
--   Publish it on Github or npmjs.com
--   Include it in your project and use it.
+TODO
 
 ## Developing
 
