@@ -11,6 +11,7 @@ import {
 export interface MockOptions {
     prompt: boolean
     promptOptions: {
+        continueOnDecline: boolean
         timeout: number
     }
 }
@@ -65,14 +66,30 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                         return new Promise((r) => r({request})) as Promise<TransactHookResponse>
                     })
                     .catch((e) => {
-                        // Throw if what we caught was a cancelation
+                        // Throw if what we caught was a cancelation of the prompt to abort
                         if (e instanceof Canceled) {
                             console.log('Prompt was cancelled and TransactPluginMock threw error.')
                             throw e
                         }
-                        console.log('Prompt was rejected and returned to TransactPluginMock.')
-                        // Otherwise if it wasn't a cancel, it was a reject, and continue without modification
-                        return new Promise((r) => r({request})) as Promise<TransactHookResponse>
+                        // Determine if we should continue if the prompt was rejected, defaults to true.
+                        let continueOnDecline = true
+                        if (
+                            this.options &&
+                            this.options.promptOptions &&
+                            this.options.promptOptions.continueOnDecline
+                        ) {
+                            continueOnDecline = this.options.promptOptions.continueOnDecline
+                        }
+                        if (continueOnDecline) {
+                            // If the prompt was rejected, and we're configured to continue, return the request
+                            console.log('Prompt was rejected and returned to TransactPluginMock.')
+                            // Otherwise if it wasn't a cancel, it was a reject, and continue without modification
+                            return new Promise((r) => r({request})) as Promise<TransactHookResponse>
+                        } else {
+                            // Otherwise if it was rejected and we shouldn't continue, and throw an error
+                            console.log('Prompt was rejected and threw an error.')
+                            throw e
+                        }
                     })
                     .finally(() => {
                         // Always cleanup the timer
