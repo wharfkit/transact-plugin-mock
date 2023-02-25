@@ -76,7 +76,7 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                         if (
                             this.options &&
                             this.options.promptOptions &&
-                            this.options.promptOptions.continueOnDecline
+                            this.options.promptOptions.continueOnDecline !== undefined
                         ) {
                             continueOnDecline = this.options.promptOptions.continueOnDecline
                         }
