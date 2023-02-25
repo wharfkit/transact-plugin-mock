@@ -27,7 +27,9 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                 // Customize the body to present the developer with information aboutt this prompt
                 let body = 'An example prompt from the TransactPluginMock for testing purposes.'
                 if (this.options.promptOptions.timeout) {
-                    body = `${body} This prompt will automatically cancel in ${this.options.promptOptions.timeout} seconds.`
+                    body = `${body} This prompt will automatically cancel in ${
+                        this.options.promptOptions.timeout / 1000
+                    } seconds.`
                 }
 
                 // Initiate a new cancelable prompt to inform the user of the fee required
@@ -50,7 +52,7 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                     timer = setTimeout(() => {
                         console.log('TransactPluginMock setTimeout has executed.')
                         prompt.cancel(
-                            `Test prompt timed out automatically after ${timeout / 1000} seconds.}`
+                            `Test prompt timed out automatically after ${timeout / 1000} seconds.`
                         )
                     }, timeout)
                 }
