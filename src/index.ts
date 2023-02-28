@@ -2,11 +2,13 @@ import {
     AbstractTransactPlugin,
     Cancelable,
     Canceled,
+    LocaleDefinitions,
     PromptResponse,
     TransactContext,
-    TransactHookResponse,
     TransactHookTypes,
 } from '@wharfkit/session'
+
+import defaultTranslations from './translations.json'
 
 export interface MockOptions {
     prompt: boolean
@@ -14,29 +16,42 @@ export interface MockOptions {
         continueOnDecline: boolean
         timeout: number
     }
+    translations?: LocaleDefinitions
 }
 
 export class TransactPluginMock extends AbstractTransactPlugin {
+    /** Define any translations for this plugin */
+    public translations = defaultTranslations
+    /** Set a unique ID for the plugin */
+    public id = 'transact-plugin-mock'
+    /** Save the options being passed specifically for this plugin */
     readonly options?: MockOptions
     constructor(options?: MockOptions) {
         super()
         this.options = options
     }
+    /** Register any hooks required for the plugin to operate */
     register(context: TransactContext): void {
         context.addHook(TransactHookTypes.beforeSign, async (request, context) => {
             if (this.options?.prompt && context.ui) {
-                // Customize the body to present the developer with information aboutt this prompt
-                let body = 'An example prompt from the TransactPluginMock for testing purposes.'
+                // Retrieve translation helper from the UI, passing the app ID
+                const t = context.ui.getTranslate(this.id)
+                // Customize the body to present the developer with information about this prompt
+                let body = t('body', {
+                    default: 'An example prompt from the TransactPluginMock for testing purposes.',
+                })
                 if (this.options.promptOptions.timeout) {
-                    body = `${body} This prompt will automatically cancel in ${
-                        this.options.promptOptions.timeout / 1000
-                    } seconds.`
+                    body +=
+                        ' ' +
+                        t('timeout', {
+                            default: `This prompt will automatically cancel in {{timeout}} seconds.`,
+                            timeout: this.options.promptOptions.timeout / 1000,
+                        })
                 }
-
                 // Initiate a new cancelable prompt to inform the user of the fee required
                 console.log('TransactPluginMock called context.ui.prompt().')
                 const prompt: Cancelable<PromptResponse> = context.ui.prompt({
-                    title: 'Example Prompt!',
+                    title: t('title', {default: 'Example Prompt!'}),
                     body,
                     elements: [
                         {
@@ -44,16 +59,20 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                         },
                     ],
                 })
-
                 // Create a timer to test the external cancelation of the prompt, if defined
                 let timer
                 if (this.options.promptOptions.timeout) {
-                    console.log('TransactPluginMock setTimeout has begun.')
                     const {timeout} = this.options.promptOptions
                     timer = setTimeout(() => {
                         console.log('TransactPluginMock setTimeout has executed.')
+                        if (!context.ui) {
+                            throw new Error('No UI defined')
+                        }
                         prompt.cancel(
-                            `Test prompt timed out automatically after ${timeout / 1000} seconds.`
+                            t('timeout-trigger', {
+                                default: `Test prompt timed out automatically after {{timeout}} seconds.`,
+                                timeout: timeout / 1000,
+                            })
                         )
                     }, timeout)
                 }
@@ -63,7 +82,7 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                     .then(async () => {
                         // If the prompt was accepted, return the request
                         console.log('Prompt was accepted and returned to TransactPluginMock.')
-                        return new Promise((r) => r({request})) as Promise<TransactHookResponse>
+                        return
                     })
                     .catch((e) => {
                         // Throw if what we caught was a cancelation of the prompt to abort
@@ -84,7 +103,8 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                             // If the prompt was rejected, and we're configured to continue, return the request
                             console.log('Prompt was rejected and returned to TransactPluginMock.')
                             // Otherwise if it wasn't a cancel, it was a reject, and continue without modification
-                            return new Promise((r) => r({request})) as Promise<TransactHookResponse>
+                            console.log('returning void')
+                            return
                         } else {
                             // Otherwise if it was rejected and we shouldn't continue, and throw an error
                             console.log('Prompt was rejected and threw an error.')
@@ -98,9 +118,6 @@ export class TransactPluginMock extends AbstractTransactPlugin {
                             clearTimeout(timer)
                         }
                     })
-            }
-            return {
-                request,
             }
         })
     }

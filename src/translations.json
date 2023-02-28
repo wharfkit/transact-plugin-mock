@@ -1,0 +1,20 @@
+{
+    "en": {
+        "title": "Example Prompt!",
+        "body": "An example prompt from the TransactPluginMock for testing purposes.",
+        "timeout": "This prompt will automatically cancel in {{timeout}} seconds.",
+        "timeout-trigger": "Test prompt timed out automatically after {{timeout}} seconds."
+    },
+    "ko": {
+        "title": "예제 프롬프트!",
+        "body": "테스트 목적으로 TransactPluginMock에서 프롬프트 예제입니다.",
+        "timeout": "이 프롬프트는 {{timeout}} 초 후에 자동으로 취소됩니다.",
+        "timeout-trigger": "{{timeout}}초 후에 테스트 프롬프트가 자동으로 시간 초과되었습니다."
+    },
+    "zh": {
+        "title": "示例提示！",
+        "body": "来自 TransactPluginMock 的示例提示，用于测试目的。",
+        "timeout": "此提示将在 {{timeout}} 秒内自动取消。",
+        "timeout-trigger": "测试提示在 {{timeout}} 秒后自动超时。"
+    }
+}
