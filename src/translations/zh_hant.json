@@ -1,0 +1,6 @@
+{
+    "title": "示例！",
+    "body": "來自 TransactPluginMock 的提示窗口，用於測試目的。",
+    "timeout": "此提示將在 {{timeout}} 秒內自動取消。",
+    "timeout-trigger": "測試提示在 {{timeout}} 秒後自動超時。"
+}

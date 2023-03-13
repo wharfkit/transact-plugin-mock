@@ -1,0 +1,6 @@
+{
+    "title": "Example Prompt!",
+    "body": "An example prompt from the TransactPluginMock for testing purposes.",
+    "timeout": "This prompt will automatically cancel in {{timeout}} seconds.",
+    "timeout-trigger": "Test prompt timed out automatically after {{timeout}} seconds."
+}

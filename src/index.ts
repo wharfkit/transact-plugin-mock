@@ -8,7 +8,7 @@ import {
     TransactHookTypes,
 } from '@wharfkit/session'
 
-import defaultTranslations from './translations.json'
+import defaultTranslations from './translations'
 
 export interface MockOptions {
     prompt: boolean
