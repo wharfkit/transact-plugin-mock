@@ -1,10 +1,33 @@
 # @wharfkit/transact-plugin-mock
 
-A mock TransactPlugin to simulate specific event types in testing environments.
+A mock TransactPlugin that can be used to simulate and test different Wharf Session Kit event types.
 
 ## Usage
 
-TODO
+Install the package:
+
+```bash
+npm install @wharfkit/transact-plugin-mock --save
+# or
+yarn add @wharfkit/transact-plugin-mock
+```
+
+To use this mock transact plugin, you must include it during SessionKit initialization:
+
+```ts
+import { TransactPluginMock } from '@wharfkit/transact-plugin-mock'
+
+const sessionKit = new SessionKit(
+  {
+    // ...arguments
+  },
+  {
+    transactPlugins: [new TransactPluginMock()],
+  }
+)
+```
+
+For more information on how to use Transact plugins, see the [SessionKit documentation](https://wharfkit.com/docs/session-kit/plugin-transact).
 
 ## Developing
 
